@@ -33,7 +33,7 @@ body {
   height: 4px;
   transform: scaleX(0);
   transition: transform 250ms ease-in-out;
-  background: linear-gradient(to right, #b96a00, #af8901, #e1bc00);
+  background: linear-gradient(to right, #5343ac, #81abce, #c0d3eb);
 }
 
 .nav-item button:hover:after {

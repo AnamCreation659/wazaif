@@ -5,8 +5,7 @@ const Cards = () => {
   return (
     <div className='container mx-auto'>
     <Navebar/>
-    
-      card 
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos at officiis, optio ipsam fuga ut unde neque! Animi maiores a accusantium. Excepturi quam praesentium dolore alias, ullam ipsa. Natus, autem?</p>
     </div>
   )
 }
