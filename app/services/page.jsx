@@ -1,18 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Navbar from "../components/navbar";
 
 const Page = () => {
-  const router = useRouter();
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await fetch("../api/card-data/get-card-data");
+        const res = await fetch("../api/card-data/get-card-data"); // Correct API path
         const data = await res.json();
-        console.log(data,'blogs')
         if (res.ok) {
           setBlogs(data.blogs);
         }
@@ -24,28 +21,35 @@ const Page = () => {
     fetchBlogs();
   }, []);
 
-  const handleUpdate = (id) => {
-    router.push(`/services/card?id=${id}`);
-  };
-
   return (
-    <div className="mx-auto p-6 bg-white shadow-md rounded-md">
+    <div className="mx-auto p-6 bg-white shadow-md rounded-md max-w-4xl">
       <Navbar />
-      <h2 className="text-2xl font-bold mb-4">All Blogs</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center">All Blogsss</h2>
 
       {blogs.length > 0 ? (
-        blogs.map((blog) => (
+        blogs.map((blog, index) => (
           <div
-            key={blog.id}
-            onClick={() => handleUpdate(blog.id)}
-            className="cursor-pointer p-4 border rounded shadow mb-4 text-center"
+            key={index}
+            className="p-4 border rounded shadow mb-6 bg-gray-50"
           >
-            <h3 className="text-lg font-semibold">{blog.title}</h3>
-            <p className="text-gray-700">{blog.content.substring(0, 100)}</p>
+            <p className="text-xl font-semibold mb-2">{blog.title}</p>
+            {blog.subtitle && (
+              <p className="text-md font-medium text-gray-600 mb-2">
+                {blog.subtitle}
+              </p>
+            )}
+            <p
+              className="text-gray-700 leading-relaxed"
+              dangerouslySetInnerHTML={{
+                __html: blog.content.length > 200
+                  ? blog.content.substring(0, 200) + "..."
+                  : blog.content,
+              }}
+            />
           </div>
         ))
       ) : (
-        <p>No blogs available.</p>
+        <p className="text-center text-gray-500">No blogs available.</p>
       )}
     </div>
   );

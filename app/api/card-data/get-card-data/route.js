@@ -1,16 +1,17 @@
-import { sql } from "@vercel/postgres";
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import pool from '../../../../lib/db'; // Adjust path according to your project structure
 
-export async function GET() {
+export async function GET(req) {
   try {
-    const result = await sql`SELECT id, title, content FROM blogs;`; // Image remove kar diya
-    const blogs = result.rows || []; 
-    return NextResponse.json({ blogs }, { status: 200 });
+    // Fetch only title, subtitle, and content
+    const result = await pool.query(`
+      SELECT title, subtitle, content FROM blogs
+    `);
+
+    // Return the fetched blogs
+    return NextResponse.json({ blogs: result.rows });
   } catch (error) {
-    console.error("Error fetching blogs:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch blogs" },
-      { status: 500 }
-    );
+    console.error('Error fetching blogs:', error);
+    return NextResponse.json({ error: 'Error fetching blogs data' }, { status: 500 });
   }
 }

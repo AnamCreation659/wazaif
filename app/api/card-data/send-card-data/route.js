@@ -1,31 +1,21 @@
-import { sql } from "@vercel/postgres";
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import pool from '../../../../lib/db'; // adjust the path as per your structure
 
 export async function POST(req) {
   try {
-    const { title, content, image = null } = await req.json(); // Image ko default null set kar diya
+    const { title, subtitle, content } = await req.json();
+    console.log(title,'title')
+    console.log(subtitle,'subtitle')
+    console.log(content,'content')
 
-    if (!title || !content) {
-      return NextResponse.json(
-        { error: "Title and content are required" },
-        { status: 400 }
-      );
-    }
-
-    await sql`
-      INSERT INTO blogs (title, content, image)
-      VALUES (${title}, ${content}, ${image});
-    `;
-
-    return NextResponse.json(
-      { message: "Blog added successfully!" },
-      { status: 201 }
+    const result = await pool.query(
+      `INSERT INTO blogs (title, subtitle, content) VALUES ($1, $2, $3) RETURNING *`,
+      [title, subtitle, content]
     );
+
+    return NextResponse.json({ message: 'Blog added successfully!', blog: result.rows[0] });
   } catch (error) {
-    console.error("Error inserting blog:", error);
-    return NextResponse.json(
-      { error: "Failed to add blog" },
-      { status: 500 }
-    );
+    console.error('Error inserting blog:', error);
+    return NextResponse.json({ error: 'Error inserting blog data' }, { status: 500 });
   }
 }

@@ -13,12 +13,14 @@ const BlogDetail = () => {
 
   useEffect(() => {
     if (!id) return;
- console.log(id,'id')
+    console.log(id, "id");
+
     const fetchBlog = async () => {
       try {
-        const res = await fetch(`../../api/card-data/single-card?id=${id}`);
+        const res = await fetch(`/api/card-data/single-card?id=${id}`); // ✅ Correct API path
         const data = await res.json();
-        console.log(data,'singleblog')
+        console.log(data, "single blog");
+
         if (res.ok) {
           setBlog(data.specificBlogResult[0]);
         } else {
@@ -35,17 +37,33 @@ const BlogDetail = () => {
   }, [id]);
 
   return (
-    <div className="mx-auto p-6 bg-white shadow-md rounded-md">
+    <div className="mx-auto p-6 bg-white shadow-md rounded-md max-w-3xl">
       <Navbar />
-      <h2 className="text-2xl font-bold mb-4">Blog Details</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Blog Details</h2>
 
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {loading && <p className="text-center">Loading...</p>}
+      {error && <p className="text-center text-red-500">{error}</p>}
 
       {blog && (
-        <div className="p-4 border rounded shadow">
-          <h3 className="text-lg font-semibold">{blog.title}</h3>
-          <p className="text-gray-700">{blog.content}</p>
+        <div className="p-6 border rounded shadow bg-gray-50">
+          {/* ✅ Blog ID */}
+          <p className="text-sm text-gray-500 mb-2">Blog ID: {blog.id}</p>
+
+          {/* ✅ Blog Title */}
+          <h3 className="text-2xl font-bold mb-4">{blog.title}</h3>
+
+          {/* ✅ Blog Subtitle */}
+          {blog.subtitle && (
+            <h4 className="text-lg font-medium text-gray-600 mb-4">
+              {blog.subtitle}
+            </h4>
+          )}
+
+          {/* ✅ Blog Content */}
+          <div
+            className="text-gray-700 leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: blog.content }}
+          />
         </div>
       )}
     </div>

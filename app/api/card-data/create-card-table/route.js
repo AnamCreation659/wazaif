@@ -1,38 +1,28 @@
-import { sql } from "@vercel/postgres";
-import { NextResponse } from "next/server";
-
-export const dynamic = "force-dynamic";
-
-async function createTable() {
+import pool from '../../../../lib/db';
+ 
+export async function GET(req) {
   try {
-    await sql`
-      CREATE TABLE IF NOT EXISTS blogs (
+    console.log("GET request received. Dropping and creating table...");
+
+    // Drop table if it already exists
+    await pool.query(`DROP TABLE IF EXISTS blogs;`);
+    console.log("Existing table dropped.");
+
+    // Create table with only title, subtitle, and content
+    await pool.query(`
+      CREATE TABLE blogs (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
-        content TEXT NOT NULL,
-        image TEXT
+        subtitle VARCHAR(255),
+        content TEXT NOT NULL
       );
-    `;
-    console.log("Table 'blogs' created or already exists.");
+    `);
+    console.log("New table created with title, subtitle, and content.");
+
+    return new Response("Table dropped and created successfully", { status: 200 });
+
   } catch (error) {
     console.error("Error creating table:", error);
-  }
-}
-
-export async function GET() {
-  console.log("GET request received. Checking table...");
-
-  try {
-    await createTable();
-    return NextResponse.json(
-      { message: "Table checked/created successfully" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error in GET request:", error);
-    return NextResponse.json(
-      { error: `Failed to process request: ${error.message}` },
-      { status: 500 }
-    );
+    return new Response(`Error creating table: ${error.message}`, { status: 500 });
   }
 }

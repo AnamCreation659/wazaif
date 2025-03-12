@@ -27,7 +27,7 @@ const Navebar = () => {
   };
 
   return (
-      <div className="container mx-auto">
+      <div className="">
         <nav className="w-full py-4 bg-blue-400">
           <div className="items-center justify-between md:flex md:items-centerx ">
             <div>
