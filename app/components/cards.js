@@ -129,7 +129,7 @@ export default function TiptapEditorWithToolbar() {
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={editor.isActive('blockquote') ? 'bg-blue-500 text-white p-1 rounded' : 'bg-white p-1 rounded'}
         >
-          "
+          {'"'}
         </button>
 
         {/* Alignment */}
