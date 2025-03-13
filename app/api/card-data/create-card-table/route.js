@@ -19,7 +19,7 @@ export async function GET(req) {
     `);
     console.log("New table created with title, subtitle, and content.");
 
-    return new Response("Table dropped and created successfully", { status: 200 });
+    return new Response("Table created successfully", { status: 200 });
 
   } catch (error) {
     console.error("Error creating table:", error);
